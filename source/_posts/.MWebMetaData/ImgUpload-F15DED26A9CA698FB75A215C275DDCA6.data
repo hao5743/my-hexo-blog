@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>F1628E819D51073316659B5A9C2B83BD</key>
+	<array>
+		<dict>
+			<key>localURL</key>
+			<string>media/switchMap.png</string>
+			<key>remoteURL</key>
+			<string>http://ol1ftyec4.bkt.clouddn.com
+title: Angular组件生命周期和钩子函数
+date: 2017-02-08 10:28:36
+tags: [angular2]
+---
+# Angular组件生命周期和钩子函数
+## 概述
+angular2中每个组件都有其生命周期，包括创建组件、渲染组件、创建渲染子组件、绑定的属性发生变化时检查它、从dom中移除。
+angular2提供了**声明周期钩子函数**，把这些关键的周期暴露给我们，以便我们做一些自定义的操作。
+![屏幕快照 2017-02-08 10.49.03](qiniu/屏幕快照 2017-02-08 10.49.03-1.png)
+
+
+## 声明周期顺序解释
+* `ngOnChanges` 当angular绑定的输入属性发生变化时响应，首次调用一定会发生在ngOnInit之前
+* `ngOnInit` 初始化指令/组件，在第一轮ngOnChanges完成之后调用，**只调用一次**
+* `ngDoCheck`在每个angular变更检测周期中调用，在ngOnChanges和ngOnInit之后调用
+* `ngAfterContentInit` 把内容渲染到组件之后调用，第一次ngDoCheck之后调用，只适用于组件，**只调用一次**
+* `ngAfterContentChecked` 每次完成内容到组件的渲染的变更检测后调用，ngAfterContentInit和每次NgDoCheck之后调用，只适用于组件
+* `ngAfterViewInit` 组件视图及其子视图初始化完成之后调用，第一次ngAfterContentChecked之后调用，**只调用一次**，只适合组件
+* `ngAfterViewChecked` 每次做完组件视图和子视图的变更检测之后调用，ngAfterViewInit和每次ngAfterContentChecked之后调用，
+  只适合组件
+* `ngOnDestroy` 在Angular销毁指令/组件之前调用。
+
+## 钩子函数执行顺序的例子
+![屏幕快照 2017-02-08 11.17.24](qiniu/屏幕快照 2017-02-08 11.17.24.png)
+
+&gt; 当输入属性发生变化时，就会看到`OnChanges`和至少两组`DoCheck`、`AfterContentChecked`和`AfterViewChecked`钩子执行。这四个钩子会执行很多次，应该让它们的逻辑尽可能精简，否则可能会影响用户体验。
+
+## 再详细解释几个钩子函数
+### ngOnInit
+* ngOnInit是组件获取初始数据的好地方
+* 在构造函数中只执行简单的局部变量初始化工作，其他什么都不要做
+* 在component中，构造函数完成之前，那些绑定的输入属性还都没有值；在`ngOnInit`执行的时候，这些属性都已经被正确赋值过了
+
+&gt; 我们访问这些属性的第一次机会，实际上是ngOnChanges方法，Angular会在ngOnInit之前调用它。 但是在那之后，Angular还会调用ngOnChanges很多次。而ngOnInit只会被调用一次
+
+### ngDoCheck
+* 使用DoCheck钩子来检测那些Angular自身无法捕获的变更并采取行动
+* 这个钩子被调用的十分频繁，应该使其实现尽可能的精简
+
+### AfterView
+`AfterViewInit`和`AfterViewChecked`钩子，Angular会在每次创建了组件的子视图后调用它们。
+
+## 最后说明
+这是angular2组件自带的生命周期钩子函数，每个基于angular2的框架还可能会有自己的钩子函数，用以方便程序的编程。比如ionic2框架的view就有自己的生命周期钩子函数。
+
+-------
+end 2017-02-08 11:32:00
+
+
+
+
+
+
+
+
+
+
+
+---
+title: Angular组件生命周期和钩子函数
+date: 2017-02-08 10:28:36
+tags: [angular2]
+---
+# Angular组件生命周期和钩子函数
+## 概述
+angular2中每个组件都有其生命周期，包括创建组件、渲染组件、创建渲染子组件、绑定的属性发生变化时检查它、从dom中移除。
+angular2提供了**声明周期钩子函数**，把这些关键的周期暴露给我们，以便我们做一些自定义的操作。
+![屏幕快照 2017-02-08 10.49.03](qiniu/屏幕快照 2017-02-08 10.49.03-1.png)
+
+
+## 声明周期顺序解释
+* `ngOnChanges` 当angular绑定的输入属性发生变化时响应，首次调用一定会发生在ngOnInit之前
+* `ngOnInit` 初始化指令/组件，在第一轮ngOnChanges完成之后调用，**只调用一次**
+* `ngDoCheck`在每个angular变更检测周期中调用，在ngOnChanges和ngOnInit之后调用
+* `ngAfterContentInit` 把内容渲染到组件之后调用，第一次ngDoCheck之后调用，只适用于组件，**只调用一次**
+* `ngAfterContentChecked` 每次完成内容到组件的渲染的变更检测后调用，ngAfterContentInit和每次NgDoCheck之后调用，只适用于组件
+* `ngAfterViewInit` 组件视图及其子视图初始化完成之后调用，第一次ngAfterContentChecked之后调用，**只调用一次**，只适合组件
+* `ngAfterViewChecked` 每次做完组件视图和子视图的变更检测之后调用，ngAfterViewInit和每次ngAfterContentChecked之后调用，
+  只适合组件
+* `ngOnDestroy` 在Angular销毁指令/组件之前调用。
+
+## 钩子函数执行顺序的例子
+![屏幕快照 2017-02-08 11.17.24](qiniu/屏幕快照 2017-02-08 11.17.24.png)
+
+&gt; 当输入属性发生变化时，就会看到`OnChanges`和至少两组`DoCheck`、`AfterContentChecked`和`AfterViewChecked`钩子执行。这四个钩子会执行很多次，应该让它们的逻辑尽可能精简，否则可能会影响用户体验。
+
+## 再详细解释几个钩子函数
+### ngOnInit
+* ngOnInit是组件获取初始数据的好地方
+* 在构造函数中只执行简单的局部变量初始化工作，其他什么都不要做
+* 在component中，构造函数完成之前，那些绑定的输入属性还都没有值；在`ngOnInit`执行的时候，这些属性都已经被正确赋值过了
+
+&gt; 我们访问这些属性的第一次机会，实际上是ngOnChanges方法，Angular会在ngOnInit之前调用它。 但是在那之后，Angular还会调用ngOnChanges很多次。而ngOnInit只会被调用一次
+
+### ngDoCheck
+* 使用DoCheck钩子来检测那些Angular自身无法捕获的变更并采取行动
+* 这个钩子被调用的十分频繁，应该使其实现尽可能的精简
+
+### AfterView
+`AfterViewInit`和`AfterViewChecked`钩子，Angular会在每次创建了组件的子视图后调用它们。
+
+## 最后说明
+这是angular2组件自带的生命周期钩子函数，每个基于angular2的框架还可能会有自己的钩子函数，用以方便程序的编程。比如ionic2框架的view就有自己的生命周期钩子函数。
+
+-------
+end 2017-02-08 11:32:00
+
+
+
+
+
+
+
+
+
+
+
+http://ol1ftyec4.bkt.clouddn.com/2017-03-08-switchMap.png</string>
+		</dict>
+	</array>
+	<key>selectedItem</key>
+	<string>F1628E819D51073316659B5A9C2B83BD</string>
+</dict>
+</plist>
